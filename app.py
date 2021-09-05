@@ -5,6 +5,8 @@ from sqlalchemy import exc
 from sqlalchemy.sql import func
 import requests
 import json
+
+# you will need to create your own secrets
 from hidden_stuff import SECRET_KEY, REDIRECT_URI, CLIENT_SECRET, CLIENT_ID
 
 app = Flask(__name__)
@@ -14,7 +16,6 @@ app.config['SECRET_KEY'] = SECRET_KEY
 db = SQLAlchemy(app)
 
 from models import User, Clip, Like
-db.create_all()
 
 ### Logic Functions
 
