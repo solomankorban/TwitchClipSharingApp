@@ -17,22 +17,13 @@
           </button>
           <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
-              <a class="nav-link" href="/profile">Profile</a>
-              <a class="nav-link" href="/clips">Clips</a>
+              <a class="nav-link" href="/clips">Popular Clips</a>
+              <a class="nav-link" href="/profile"><i class="fas fa-plus"></i> Create a Post</a>
             </div>
           </div>
         </div>
     </nav>
 
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-    {% for message in messages %}
-    <div class="alert alert-info" role="alert">
-        {{ message }}
-    </div>
-    {% endfor %}
-    {% endif %}
-    {% endwith %}
     {% block content %}{% endblock %}
 
 

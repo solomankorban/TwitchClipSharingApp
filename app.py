@@ -5,14 +5,15 @@ from sqlalchemy import exc
 from sqlalchemy.sql import func
 import requests
 import json
-
-# you will need to create your own secrets
-from hidden_stuff import SECRET_KEY, REDIRECT_URI, CLIENT_SECRET, CLIENT_ID
+import os
+CLIENT_ID = os.environ.get('CLIENT_ID')
+CLIENT_SECRET = os.environ.get('CLIENT_SECRET')
+REDIRECT_URI = os.environ.get('REDIRECT_URI')
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///capstone'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL').replace('postgres://', 'postgresql://')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SECRET_KEY'] = SECRET_KEY
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 db = SQLAlchemy(app)
 
 from models import User, Clip, Like
@@ -284,11 +285,15 @@ def view_user(id):
 
 @app.route("/")
 def home():
-    """Redirects to lander if no user and to clips if there is a user"""
-    if not authed():
-        return render_template('lander.html')
+    """Displays all posted clips sorted by total likes"""
+    
+    if authed():
+        return redirect("/clips")
 
-    return redirect('/clips')
+    # querying clips from database ordered by total likes
+    clips = db.session.query(Clip, func.count(Like.user_id).label('total')).join(Like, isouter=True).group_by(Clip).order_by('total', Clip.created_at).all()
+
+    return render_template('lander.html', clips=clips)
 
 @app.route("/auth")
 def auth():

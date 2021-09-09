@@ -1,71 +1,34 @@
 {% extends 'base.html' %}
 
-{% block title %}Twitcher{% endblock %}
+{% block title %}Clips{% endblock %}
 
 {% block content %}
-<div class="container">
-    <h1 class="text-primary display-2 fw-bold">Where Twitch Streamers Can Grow!</h1>
-    <div class="row">
-        <div class="col-sm-12 col-lg-6">
-            <img src="https://thumbor.forbes.com/thumbor/fit-in/1200x0/filters%3Aformat%28jpg%29/https%3A%2F%2Fspecials-images.forbesimg.com%2Fimageserve%2F1054455926%2F0x0.jpg" class="img-fluid" alt="...">
-        </div>
-        <div class="col">
-            <h2 class="display-5 fw-bold">Share Your Clips Now!</h2>
-            <p class="lead fw-normal">Twitcher is a clip sharing platform for Twitch streamers who need help getting discovered. Streamers can sign up through the Twitch api and share clips of their own channel. This means you are not competeing with users reposting content that is not their own. Clips are shared in a way that benefits streamers that create quality content.</p>
-            <ul class="list-group list-group-flush fw-bold my-2">
-                <li class="list-group-item"><i class="fas fa-check text-success"></i> Streamers share clips of their own channel to maintain integerity.</li>
-                <li class="list-group-item"><i class="fas fa-check text-success"></i> Clips are shared publicly by number of likes to reward good content.</li>
-                <li class="list-group-item"><i class="fas fa-check text-success"></i> Get viewers directly to your Twitch stream by sharing your clips.</li>
-            </ul>
-            <h5 class="display-5 text-warning fw-bold" style="float:left;">DO IT NOW!</h5>
-
-            <a href="/auth">
-                <button type="button" class="btn btn-danger btn-rounded col-6 rounded-pill" style="float:right;">
-                    <h6 class="display-6 fw-bold text-white">Share a clip!</h6>
-                </button> 
+<div id="clip-container" class="container col-lg-6 my-5">
+    <h1 class="display-2">Popular Clips</h1>
+    {% for clip, num_of_likes in clips %}
+    <div class="card p-2 my-2">
+        <div class="m-1 lead">
+            <a href="/users/{{clip.user.id}}" style="color: inherit;text-decoration: inherit;">
+                <img src="{{clip.user.profile_image_url}}" style="max-width: 25px;" class="rounded-circle border border-primary" alt=""> {{clip.user.display_name}}
             </a>
-            
         </div>
+        
+        <div class="ratio ratio-16x9 m-1">
+            <iframe
+            src="https://clips.twitch.tv/embed?clip={{clip.id}}&parent=twitchclipapp.herokuapp.com"
+            allowfullscreen="false">
+            </iframe>
+        </div>
+        {% if clip.description %}
+        <blockquote class="blockquote">
+            <p class="mb-0">{{clip.description}}</p>
+        </blockquote>
+        {% endif %}
+        
     </div>
-    <hr>
-    <div class="row">
-        <div class="col-sm-12 col-lg-6">
-            <h4 class="display-5 fw-bold">What Our Users Think</h4>
-            <div class="row">
-                <div class="col-6">
-                    <img src="https://triptide.london/images/triptoidImages/tn-147508219211934063_10153663979659171_2017178538_n.jpg" class="img-fluid rounded-circle" alt="...">
-                </div>
-                <div class="col">
-                    <figure>
-                        <blockquote class="blockquote">
-                            <p><i class="fas fa-quote-left"></i> Twitcher helped me get affiliate status on Twitch and bring new viwers to my stream I never would of met otherwise. I would recommend the app to all streamers looking to grow! <i class="fas fa-quote-right"></i></p>
-                        </blockquote>
-                        <figcaption class="blockquote-footer">
-                            Cody Wise
-                        </figcaption>
-                    </figure>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-12 col-lg-6">
-            <h4 class="display-5 fw-bold">What is Twitcher?</h4>
-            <div class="row">
-                <div class="col-6">
-                    <img src="https://media-exp1.licdn.com/dms/image/C4E03AQGehMH1c4Cq1w/profile-displayphoto-shrink_800_800/0/1624799325129?e=1636588800&v=beta&t=r0zO5wOWjHb5KSBz96NuCoAJU-IgyaV5zvMD0e1rqas" class="img-fluid rounded-circle" alt="...">
-                </div>
-                <div class="col">
-                    <p class="lead fw-normal">Twitcher is a portfolio project created by <a href="https://solomankorban.com/">Soloman Korban</a> to demonstrate skills</p>
-                    <ul class="list-group list-group-flush fw-bold my-2">
-                        <li class="list-group-item"><i class="fas fa-check text-success"></i> API creation and usage</li>
-                        <li class="list-group-item"><i class="fas fa-check text-success"></i> Database creation and C.R.U.D</li>
-                        <li class="list-group-item"><i class="fas fa-check text-success"></i> Web servers & frameworks</li>
-                        <li class="list-group-item"><i class="fas fa-check text-success"></i> Object-oriented design</li>
-                    </ul>
-                </div>
-            </div>
-
-        </div>
-    </div>
+    
+        
+    {% endfor %}
 </div>
 
 {% endblock %}

@@ -9,4 +9,3 @@ class Test(TestCase):
 
             self.assertEqual(resp.status_code, 200)
             self.assertIn('Where Twitch', html)
-
